@@ -6,7 +6,7 @@ A command-line tool to merge multiple JSON files into a single JSON file.
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/json_merger.git
+git clone git@github.com:amahmod/json_merger.git
 cd json_merger
 
 # Install dependencies
