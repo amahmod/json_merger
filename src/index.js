@@ -30,7 +30,7 @@ const argv = yargs(hideBin(process.argv))
     .alias('help', 'h').argv
 
 // Function to merge JSON files
-async function mergeJsonFiles() {
+async function merge_json_files() {
     try {
         // Ensure input directory exists
         if (!fs.existsSync(argv.input)) {
@@ -42,26 +42,26 @@ async function mergeJsonFiles() {
         fs.ensureDirSync(argv.output)
 
         // Find all JSON files in the input directory
-        const jsonFiles = globSync('**/*.json', { cwd: argv.input })
+        const json_files = globSync('**/*.json', { cwd: argv.input })
 
-        if (jsonFiles.length === 0) {
+        if (json_files.length === 0) {
             console.error(`Error: No JSON files found in "${argv.input}"`)
             process.exit(1)
         }
 
-        console.log(`Found ${jsonFiles.length} JSON files to merge`)
+        console.log(`Found ${json_files.length} JSON files to merge`)
 
         // Merge all JSON files
-        let mergedData = {}
+        let merged_data = {}
 
-        for (const file of jsonFiles) {
-            const filePath = path.join(argv.input, file)
+        for (const file of json_files) {
+            const file_path = path.join(argv.input, file)
             try {
-                const fileContent = fs.readFileSync(filePath, 'utf8')
-                const jsonData = JSON.parse(fileContent)
+                const file_content = fs.readFileSync(file_path, 'utf8')
+                const json_data = JSON.parse(file_content)
 
                 // Deep merge the JSON data
-                mergedData = deepMerge(mergedData, jsonData)
+                merged_data = deep_merge(merged_data, json_data)
                 console.log(`Merged: ${file}`)
             } catch (err) {
                 console.error(`Error processing file ${file}: ${err.message}`)
@@ -69,10 +69,10 @@ async function mergeJsonFiles() {
         }
 
         // Write the merged JSON to the output file
-        const outputFilePath = path.join(argv.output, argv.filename)
-        fs.writeFileSync(outputFilePath, JSON.stringify(mergedData, null, 2))
+        const output_file_path = path.join(argv.output, argv.filename)
+        fs.writeFileSync(output_file_path, JSON.stringify(merged_data, null, 2))
 
-        console.log(`Successfully merged ${jsonFiles.length} files into ${outputFilePath}`)
+        console.log(`Successfully merged ${json_files.length} files into ${output_file_path}`)
     } catch (err) {
         console.error(`Error: ${err.message}`)
         process.exit(1)
@@ -80,16 +80,16 @@ async function mergeJsonFiles() {
 }
 
 // Helper function for deep merging objects
-function deepMerge(target, source) {
+function deep_merge(target, source) {
     const output = { ...target }
 
-    if (isObject(target) && isObject(source)) {
+    if (is_object(target) && is_object(source)) {
         Object.keys(source).forEach(key => {
-            if (isObject(source[key])) {
+            if (is_object(source[key])) {
                 if (!(key in target)) {
                     Object.assign(output, { [key]: source[key] })
                 } else {
-                    output[key] = deepMerge(target[key], source[key])
+                    output[key] = deep_merge(target[key], source[key])
                 }
             } else if (Array.isArray(source[key])) {
                 if (Array.isArray(target[key])) {
@@ -108,9 +108,9 @@ function deepMerge(target, source) {
 }
 
 // Helper to check if value is an object
-function isObject(item) {
+function is_object(item) {
     return item && typeof item === 'object' && !Array.isArray(item)
 }
 
 // Run the main function
-mergeJsonFiles()
+merge_json_files()
