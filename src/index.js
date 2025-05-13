@@ -85,6 +85,11 @@ function deep_merge(target, source) {
 
     if (is_object(target) && is_object(source)) {
         Object.keys(source).forEach(key => {
+            // Skip null or undefined values in source
+            if (source[key] === null || source[key] === undefined) {
+                return
+            }
+
             if (is_object(source[key])) {
                 if (!(key in target)) {
                     Object.assign(output, { [key]: source[key] })
